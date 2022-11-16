@@ -3,12 +3,72 @@
 
 #include <iostream>
 
+using namespace std;
+
+enum Building { Empty, House, Farm };
+enum Action { Place, Delete, Display, Exit, Wrong };
+
+Action ShowMenu() {
+	string menu = "Menue: \nDruecke 's' um Gebauede zu setzen\nDruecke 'l' um Bereich zu loeschen\nDruecke 'a' um Plan auszugeben\nDruecke 'e' um Programm zu beenden";
+	cout << menu << endl;
+	string input;
+	cin >> input;
+
+	if (input._Equal("s")) {
+		return Place;
+	}
+	else if (input._Equal("l")) {
+		return Delete;
+	}
+	else if (input._Equal("a")) {
+		return Display;
+	}
+	else if (input._Equal("e")) {
+		return Exit;
+	}
+	else {
+		return Wrong;
+	}
+}
+
 int main(int argc, char** argv)
 {
-	std::cout << "Hello World!" << std::endl;
+	/*std::cout << "Hello World!" << std::endl;
 	for (int i = 0; i < argc; i++)
-		std::cout << argv[i] << std::endl;
+		std::cout << argv[i] << std::endl;*/
+
+	if (argc != 3)
+		return INT32_MAX;
+
+	char* ptr;
+	long height = strtol(argv[1], &ptr, 10);
+	long width = strtol(argv[2], &ptr, 10);
+
+	cout << "Erstelleung eines Bauplans der Groesse: " << height << "x" << width << endl;
+
+	Building** plan = new Building * [width];
+
+	for (int i = 0; i < width; i++) {
+		plan[i] = new Building[height];
+		for (int j = 0; j < height; j++) {
+			plan[i][j] = Empty;
+		}
+	}
+
+	while (1) {
+		Action nextAction = ShowMenu();
+		if (nextAction == Exit) {
+			return 0;
+		}
+		else if (nextAction == Wrong) {
+			continue;
+		}
+
+		//HandleAction(nextAction);
+	}
+
 }
+
 
 // Programm ausführen: STRG+F5 oder Menüeintrag "Debuggen" > "Starten ohne Debuggen starten"
 // Programm debuggen: F5 oder "Debuggen" > Menü "Debuggen starten"
