@@ -60,7 +60,8 @@ bool PlaceBuilding() {
 	int yPosition;
 	Building type;
 	string typeString;
-	printf("Art (%s, %s, %s): ", buildings[Empty].c_str(), buildings[House].c_str(), buildings[Farm].c_str());
+
+	printf("Art (%s, %s): ", buildings[House].c_str(), buildings[Farm].c_str());
 	cin >> typeString;
 	auto it = table.find(typeString);
 	if (it != table.end()) {
@@ -72,17 +73,17 @@ bool PlaceBuilding() {
 
 	cout << "Hoehe: " << endl;
 	cin >> heightOfBuilding;
-	if (heightOfBuilding <= 0 || heightOfBuilding >= sizeof(plan[0])) {
+	if (heightOfBuilding < 0 || heightOfBuilding > Height) {
 		return false;
 	}
 	cout << "Breite: " << endl;
 	cin >> widthOfBuilding;
-	if (widthOfBuilding <= 0 || widthOfBuilding >= sizeof(plan)) {
+	if (widthOfBuilding < 0 || widthOfBuilding > Width) {
 		return false;
 	}
 	cout << "x-Koordinate: " << endl;
 	cin >> xPosition;
-	if (xPosition <= 0 || xPosition >= sizeof(plan)) {
+	if (xPosition < 0 || xPosition + widthOfBuilding > Width) {
 		return false;
 	}
 	cout << "y-Koordinate: " << endl;
@@ -92,7 +93,7 @@ bool PlaceBuilding() {
 	//cout << sizeof(plan[0]) << endl;
 	//cout << (sizeof(plan) / sizeof(plan[0])) << endl;
 	//cout << (sizeof(plan[0]) / sizeof(plan[0][0])) << endl;
-	if (yPosition <= 0 || yPosition >= sizeof(plan[0])) {
+	if (yPosition < 0 || yPosition + heightOfBuilding > Height) {
 		return false;
 	}
 
@@ -110,21 +111,73 @@ bool PlaceBuilding() {
 }
 
 bool DeleteBuilding() {
-	return false;
+	int heightOfBuilding;
+	int widthOfBuilding;
+	int xPosition;
+	int yPosition;
+	cout << "Hoehe: " << endl;
+	cin >> heightOfBuilding;
+	if (heightOfBuilding <= 0 || heightOfBuilding >= Height) {
+		return false;
+	}
+	cout << "Breite: " << endl;
+	cin >> widthOfBuilding;
+	if (widthOfBuilding <= 0 || widthOfBuilding >= Width) {
+		return false;
+	}
+	cout << "x-Koordinate: " << endl;
+	cin >> xPosition;
+	if (xPosition <= 0 || xPosition + widthOfBuilding >= Width) {
+		return false;
+	}
+	cout << "y-Koordinate: " << endl;
+	cin >> yPosition;
+	// test of size of:
+	//cout << sizeof(plan) << endl;
+	//cout << sizeof(plan[0]) << endl;
+	//cout << (sizeof(plan) / sizeof(plan[0])) << endl;
+	//cout << (sizeof(plan[0]) / sizeof(plan[0][0])) << endl;
+	if (yPosition <= 0 || yPosition + heightOfBuilding >= Height) {
+		return false;
+	}
+
+	for (int i = xPosition; i < xPosition + widthOfBuilding; i++) {
+		for (int j = yPosition; j < yPosition + heightOfBuilding; j++) {
+			plan[i][j] = Empty;
+		}
+	}
+
+	return true;
 }
 
 bool DisplayBuilding() {
-	return false;
+	for (int j = 0; j < Height; j++) {
+		cout << "------- ";
+	}
+	for (int i = 0; i < Width; i++) {
+		cout << "| ";
+		for (int j = 0; j < Height; j++) {
+			cout << buildings[plan[i][j]] + " | ";
+		}
+		cout << endl;
+		for (int j = 0; j < Height; j++) {
+			cout << "------- ";
+		}
+		cout << endl;
+	}
+	return true;
 }
 
 void HandleAction(Action action) {
 	if (action == Place) {
 		if (PlaceBuilding()) {
 			cout << "Gebaeude erfolgreich gesetzt!" << endl;
-		} 
+		}
 	}
 	else if (action == Delete) {
-		DeleteBuilding();
+		if (DeleteBuilding()) {
+			cout << "Bereich erfolgreich gelöscht!" << endl;
+		}
 	}
 	else {
 		DisplayBuilding();
