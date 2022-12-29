@@ -186,7 +186,7 @@ bool DeleteBuilding() {
 	// read and check y coordinate input
 	cout << "y-Koordinate: " << endl;
 	cin >> yPosition;
-	// test of size of:
+	// test of size of: 
 	//cout << sizeof(plan) << endl;
 	//cout << sizeof(plan[0]) << endl;
 	//cout << (sizeof(plan) / sizeof(plan[0])) << endl;
