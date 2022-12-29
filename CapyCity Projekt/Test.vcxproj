@@ -131,7 +131,6 @@
     <ClCompile Include="main.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="SimulationTool.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h" />

@@ -1,24 +1,23 @@
-// Test.cpp : Diese Datei enthält die Funktion "main". Hier beginnt und endet die Ausführung des Programms.
-//
-
 #include <iostream>
 #include "main.h"
 #include <unordered_map>
 
 using namespace std;
 
-enum Building { Empty, House, Farm };
-enum Action { Place, Delete, Display, Exit, Wrong };
-string buildings[] = { "Empty", "House", "Farm" };
-
 int Height;
 int Width;
 Building** plan;
 
 /// <summary>
-/// 
+/// Mapping enum value to string.
+/// </summary>
+string buildings[] = { "Empty", "House", "Farm" };
+
+/// <summary>
+/// Mapping the Building name to its enum value.
 /// </summary>
 static std::unordered_map<std::string, Building> const table = { {"Empty", Empty}, {"House", House}, {"Farm", Farm} };
+
 
 /// <summary>
 /// Shows the menu for users to choose action.
@@ -98,7 +97,7 @@ bool PlaceBuilding() {
 	cout << "Breite: " << endl;
 	cin >> widthOfBuilding;
 	if (widthOfBuilding < 0 || widthOfBuilding > Width) {
-		cout << "Ups! Breite ist zu klein oder zu groß." << endl;
+		cout << "Ups! Breite ist zu klein oder zu gross." << endl;
 		return false;
 	}
 
@@ -106,7 +105,7 @@ bool PlaceBuilding() {
 	cout << "Hoehe: " << endl;
 	cin >> heightOfBuilding;
 	if (heightOfBuilding < 0 || heightOfBuilding > Height) {
-		cout << "Ups! Hoehe ist zu klein oder zu groß." << endl;
+		cout << "Ups! Hoehe ist zu klein oder zu gross." << endl;
 		return false;
 	}
 
@@ -121,11 +120,6 @@ bool PlaceBuilding() {
 	// read and check y coordinate input
 	cout << "y-Koordinate: " << endl;
 	cin >> yPosition;
-	// test of size of:
-	//cout << sizeof(plan) << endl;
-	//cout << sizeof(plan[0]) << endl;
-	//cout << (sizeof(plan) / sizeof(plan[0])) << endl;
-	//cout << (sizeof(plan[0]) / sizeof(plan[0][0])) << endl;
 	if (yPosition < 0 || yPosition + heightOfBuilding > Height) {
 		cout << "Ups! Das Gebaeude ragt ueber die verfuegbare Flaeche hinaus." << endl;
 		return false;
@@ -163,7 +157,7 @@ bool DeleteBuilding() {
 	cout << "Breite: " << endl;
 	cin >> widthOfBuilding;
 	if (widthOfBuilding < 0 || widthOfBuilding > Width) {
-		cout << "Ups! Breite ist zu klein oder zu groß." << endl;
+		cout << "Ups! Breite ist zu klein oder zu gross." << endl;
 		return false;
 	}
 
@@ -171,7 +165,7 @@ bool DeleteBuilding() {
 	cout << "Hoehe: " << endl;
 	cin >> heightOfBuilding;
 	if (heightOfBuilding < 0 || heightOfBuilding > Height) {
-		cout << "Ups! Hoehe ist zu klein oder zu groß." << endl;
+		cout << "Ups! Hoehe ist zu klein oder zu gross." << endl;
 		return false;
 	}
 
@@ -179,26 +173,15 @@ bool DeleteBuilding() {
 	cout << "x-Koordinate: " << endl;
 	cin >> xPosition;
 	if (xPosition < 0 || xPosition + widthOfBuilding > Width) {
-		cout << "Ups! Das Gebaeude ragt ueber die verfuegbare Flaeche hinaus." << endl;
+		cout << "Ups! Der zu loeschende Radius ragt ueber die verfuegbare Flaeche hinaus." << endl;
 		return false;
 	}
 
 	// read and check y coordinate input
 	cout << "y-Koordinate: " << endl;
 	cin >> yPosition;
-	// test of size of: 
-	//cout << sizeof(plan) << endl;
-	//cout << sizeof(plan[0]) << endl;
-	//cout << (sizeof(plan) / sizeof(plan[0])) << endl;
-	//cout << (sizeof(plan[0]) / sizeof(plan[0][0])) << endl;
 	if (yPosition < 0 || yPosition + heightOfBuilding > Height) {
-		cout << "Ups! Das Gebaeude ragt ueber die verfuegbare Flaeche hinaus." << endl;
-		return false;
-	}
-
-	// check if there are already other buildings in the area
-	if (FindOverlappingBuildings(xPosition, yPosition, widthOfBuilding, heightOfBuilding)) {
-		cout << "Kann kein Gebaeude setzen! Es existiert bereits eins an dieser Stelle!" << endl;
+		cout << "Ups! Der zu loeschende Radius ragt ueber die verfuegbare Flaeche hinaus." << endl;
 		return false;
 	}
 
@@ -258,10 +241,6 @@ void HandleAction(Action action) {
 
 int main(int argc, char** argv)
 {
-	/*std::cout << "Hello World!" << std::endl;
-	for (int i = 0; i < argc; i++)
-		std::cout << argv[i] << std::endl;*/
-
 	if (argc != 3) return INT32_MAX;
 
 	char* ptr;
