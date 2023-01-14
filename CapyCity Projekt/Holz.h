@@ -6,5 +6,9 @@ class Holz :
 public:
     Holz() : Material(10) { };
     ~Holz() = default;
+
+    void ausgeben() override {
+        cout << "Holz";
+    }
 };
 

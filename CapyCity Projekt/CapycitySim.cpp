@@ -1,4 +1,5 @@
 #include "CapycitySim.h"
+#include <map>
 
 
 ///// <summary>
@@ -31,7 +32,7 @@ CapycitySim::Action CapycitySim::ShowMenu() {
 		return Delete;
 	}
 	else if (input._Equal("a")) {
-		return Display;
+		return Displays;
 	}
 	else if (input._Equal("e")) {
 		return Exit;
@@ -74,7 +75,7 @@ bool CapycitySim::PlaceBuilding() {
 	Building type;
 	string typeString;
 
-	/*printf("Art (%s, %s): ", );*/
+	cout << "Art des Gebaeudes (Solarpanel, Windkraftwerk, Wasserkraftwerk): " << endl;
 	cin >> typeString;
 	if (typeString._Equal("Solarpanel")) {
 		type = Solarpanel();
@@ -194,24 +195,65 @@ bool CapycitySim::DeleteBuilding() {
 /// Action Display Building. Prints current Building Plan.
 /// </summary>
 /// <returns></returns>
-bool CapycitySim::DisplayBuilding() {
+bool CapycitySim::Display() {
+	DisplayPlan();
+
+	DisplayBuildings();
+
+	return true;
+}
+
+void CapycitySim::DisplayBuildings() {
+	cout << endl << "Gebaeude: " << endl;
+	map<string, int> buildingToCount;
 	for (int i = 0; i < width; i++) {
-		cout << " -------";
+		for (int j = 0; j < height; j++) {
+			string currLabel = plan[i][j].getLabel();
+			if (currLabel == "Empty") continue;
+
+			if (buildingToCount.count(currLabel) == 0) {
+				buildingToCount.emplace(currLabel, 1);
+			}
+			else {
+				buildingToCount[currLabel]++;
+			}
+		}
+	}
+
+	map<string, Building> labelToDummy = { {"Empty", Building()}, {"Solarpanel", Solarpanel()}, {"Windkraftwerk", Windkraftwerk()}, {"Wasserkraftwerk", Wasserkraftwerk()} };
+
+	int gesamtpreisPlan = 0;
+
+	for (auto pair : buildingToCount) {
+		cout << pair.first << ": " << pair.second << " Felder" << endl << " - - - Einzelpreis pro Baufeld: " << labelToDummy[pair.first].getPreis() << endl << " - - - Benoetigte Materialien pro Baufeld: ";
+		labelToDummy[pair.first].materialAusgeben();
+		cout << endl;
+
+		gesamtpreisPlan += labelToDummy[pair.first].getPreis() * pair.second;
+	}
+
+	cout << "Gesamtpreis fuer alle Gebaeude und Baufelder des Plans: " << gesamtpreisPlan << endl;
+}
+
+void CapycitySim::DisplayPlan() {
+	cout << endl << endl << "Plan: " << endl;
+
+	cout << " ";
+	for (int j = 0; j < width; j++) {
+		balkenAusgeben(plan[j][0].getLabel().size());
 	}
 	cout << endl;
 
 	for (int i = 0; i < height; i++) {
-		cout << "| ";
 		for (int j = 0; j < width; j++) {
-			cout << plan[j][i].getLabel() + " | ";
+			plan[j][i].ausgeben();
 		}
-		cout << endl;
+		cout << "|" << endl << " ";
 		for (int j = 0; j < width; j++) {
-			cout << " -------";
+			balkenAusgeben(plan[j][i].getLabel().size());
 		}
 		cout << endl;
 	}
-	return true;
 }
 
 /// <summary>
@@ -230,6 +272,14 @@ void CapycitySim::HandleAction(Action action) {
 		}
 	}
 	else {
-		DisplayBuilding();
+		Display();
 	}
 }
+
+
+void CapycitySim::balkenAusgeben(int count) {
+	for (int i = 0; i <= count; i++) {
+		cout << "-";
+	}
+	cout << "- ";
+};

@@ -6,7 +6,7 @@ class Wasserkraftwerk :
 {
 public:
 	Wasserkraftwerk(double gP = 1000) : Building(gP, "Wasserkraftwerk") {
-		Building::materialien = { new Holz(), new Holz(), new Holz(), new Metall(), new Metall(), new Metall(), new Kunststoff()};
+		Building::materialien = { new Holz(), new Holz(), new Holz(), new Metall(), new Metall(), new Metall(), new Kunststoff() };
 	}
 };
 

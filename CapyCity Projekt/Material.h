@@ -1,4 +1,8 @@
 #pragma once
+#include <iostream>
+
+using namespace std;
+
 class Material
 {
 protected:
@@ -9,5 +13,9 @@ public:
 
 	double getPreis() { return preis; };
 	void setPreis(double p) { preis = p; };
+
+	virtual void ausgeben() {
+		cout << "Material";
+	}
 };
 

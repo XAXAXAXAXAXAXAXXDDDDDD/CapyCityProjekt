@@ -6,5 +6,9 @@ class Kunststoff :
 public:
     Kunststoff() : Material(2) { };
     ~Kunststoff() = default;
+
+    void ausgeben() override {
+        cout << "Kunststoff";
+    }
 };
 

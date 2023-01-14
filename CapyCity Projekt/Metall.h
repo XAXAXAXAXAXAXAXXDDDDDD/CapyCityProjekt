@@ -6,5 +6,9 @@ class Metall :
 public:
     Metall() : Material(50) { };
     ~Metall() = default;
+
+    void ausgeben() override {
+        cout << "Metall";
+    }
 };
 
