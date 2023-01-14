@@ -241,41 +241,41 @@ void HandleAction(Action action) {
 
 int main(int argc, char** argv)
 {
-	//if (argc != 3) return INT32_MAX;
+	if (argc != 3) return INT32_MAX;
 
-	//char* ptr;
-	//Width = strtol(argv[1], &ptr, 10);
-	//Height = strtol(argv[2], &ptr, 10);
+	char* ptr;
+	Width = strtol(argv[1], &ptr, 10);
+	Height = strtol(argv[2], &ptr, 10);
 
-	//cout << "Erstelleung eines Bauplans der Groesse: " << Width << "x" << Height << endl;
+	cout << "Erstelleung eines Bauplans der Groesse: " << Width << "x" << Height << endl;
 
-	//// init 2 dimensional array plan 
-	//// define first component (plan[i])
-	//plan = new Building * [Width];
-	//for (int i = 0; i < Width; i++) {
-	//	// foreach plan[i] define second component plan[i][second]
-	//	plan[i] = new Building[Height];
-	//	for (int j = 0; j < Height; j++) {
-	//		// init value is empty 
-	//		plan[i][j] = Empty;
-	//	}
-	//}
+	// init 2 dimensional array plan 
+	// define first component (plan[i])
+	plan = new Building * [Width];
+	for (int i = 0; i < Width; i++) {
+		// foreach plan[i] define second component plan[i][second]
+		plan[i] = new Building[Height];
+		for (int j = 0; j < Height; j++) {
+			// init value is empty 
+			plan[i][j] = Empty;
+		}
+	}
 
-	//// start user interaction
-	//while (1) {
+	// start user interaction
+	while (1) {
 
-	//	Action nextAction = ShowMenu();
+		Action nextAction = ShowMenu();
 
-	//	if (nextAction == Exit) {
-	//		return 0;
-	//	}
-	//	else if (nextAction == Wrong) {
-	//		continue;
-	//	}
-	//	else {
-	//		HandleAction(nextAction);
-	//	}
+		if (nextAction == Exit) {
+			return 0;
+		}
+		else if (nextAction == Wrong) {
+			continue;
+		}
+		else {
+			HandleAction(nextAction);
+		}
 
-	//}
+	}
 
 }
