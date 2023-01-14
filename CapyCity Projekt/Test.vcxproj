@@ -128,12 +128,30 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Building.cpp" />
+    <ClCompile Include="CapycitySim.cpp" />
+    <ClCompile Include="Solarpanel.cpp" />
+    <ClCompile Include="Wasserkraftwerk.cpp" />
+    <ClCompile Include="Holz.cpp" />
+    <ClCompile Include="Windkraftwerk.cpp" />
+    <ClCompile Include="Kunststoff.cpp" />
     <ClCompile Include="main.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="Material.cpp" />
+    <ClCompile Include="Metall.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Building.h" />
+    <ClInclude Include="CapycitySim.h" />
+    <ClInclude Include="Solarpanel.h" />
+    <ClInclude Include="Wasserkraftwerk.h" />
+    <ClInclude Include="Holz.h" />
+    <ClInclude Include="Windkraftwerk.h" />
+    <ClInclude Include="Kunststoff.h" />
     <ClInclude Include="main.h" />
+    <ClInclude Include="Material.h" />
+    <ClInclude Include="Metall.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
