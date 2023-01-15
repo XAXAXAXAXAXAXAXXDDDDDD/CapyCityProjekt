@@ -1,5 +1,6 @@
 #include "CapycitySim.h"
 #include <map>
+#include <set>
 
 
 ///// <summary>
@@ -71,7 +72,7 @@ bool CapycitySim::PlaceBuilding() {
 	int heightOfBuilding;
 	int widthOfBuilding;
 	int xPosition;
-	int yPosition; 
+	int yPosition;
 	Building* type = emptyDummyBuilding;
 	string typeString;
 
@@ -85,7 +86,7 @@ bool CapycitySim::PlaceBuilding() {
 	// read and check width input
 	cout << "Breite: " << endl;
 	cin >> widthOfBuilding;
-	if (widthOfBuilding < 0 || widthOfBuilding > width) {
+	if (widthOfBuilding <= 0 || widthOfBuilding > width) {
 		cout << "Ups! Breite ist zu klein oder zu gross." << endl;
 		return false;
 	}
@@ -93,7 +94,7 @@ bool CapycitySim::PlaceBuilding() {
 	// read and check height input
 	cout << "Hoehe: " << endl;
 	cin >> heightOfBuilding;
-	if (heightOfBuilding < 0 || heightOfBuilding > height) {
+	if (heightOfBuilding <= 0 || heightOfBuilding > height) {
 		cout << "Ups! Hoehe ist zu klein oder zu gross." << endl;
 		return false;
 	}
@@ -147,24 +148,24 @@ bool CapycitySim::PlaceBuilding() {
 /// Action Delete Building.
 /// </summary>
 /// <returns></returns>
-bool CapycitySim::DeleteBuilding() {
-	int heightOfBuilding;
-	int widthOfBuilding;
+bool CapycitySim::DeleteArea() {
+	int heightOfArea;
+	int widthOfArea;
 	int xPosition;
 	int yPosition;
 
 	// read and check width input
 	cout << "Breite: " << endl;
-	cin >> widthOfBuilding;
-	if (widthOfBuilding < 0 || widthOfBuilding > width) {
+	cin >> widthOfArea;
+	if (widthOfArea <= 0 || widthOfArea > width) {
 		cout << "Ups! Breite ist zu klein oder zu gross." << endl;
 		return false;
 	}
 
 	// read and check height input
 	cout << "Hoehe: " << endl;
-	cin >> heightOfBuilding;
-	if (heightOfBuilding < 0 || heightOfBuilding > height) {
+	cin >> heightOfArea;
+	if (heightOfArea <= 0 || heightOfArea > height) {
 		cout << "Ups! Hoehe ist zu klein oder zu gross." << endl;
 		return false;
 	}
@@ -172,7 +173,7 @@ bool CapycitySim::DeleteBuilding() {
 	// read and check x coordinate input
 	cout << "x-Koordinate: " << endl;
 	cin >> xPosition;
-	if (xPosition < 0 || xPosition + widthOfBuilding > width) {
+	if (xPosition < 0 || xPosition + widthOfArea > width) {
 		cout << "Ups! Der zu loeschende Radius ragt ueber die verfuegbare Flaeche hinaus." << endl;
 		return false;
 	}
@@ -180,16 +181,27 @@ bool CapycitySim::DeleteBuilding() {
 	// read and check y coordinate input
 	cout << "y-Koordinate: " << endl;
 	cin >> yPosition;
-	if (yPosition < 0 || yPosition + heightOfBuilding > height) {
+	if (yPosition < 0 || yPosition + heightOfArea > height) {
 		cout << "Ups! Der zu loeschende Radius ragt ueber die verfuegbare Flaeche hinaus." << endl;
 		return false;
 	}
 
-	for (int i = xPosition; i < xPosition + widthOfBuilding; i++) {
-		for (int j = yPosition; j < yPosition + heightOfBuilding; j++) {
+	for (int i = xPosition; i < xPosition + widthOfArea; i++) {
+		for (int j = yPosition; j < yPosition + heightOfArea; j++) {
 			plan[i][j] = emptyDummyBuilding;
 		}
 	}
+
+	set<Building*> temp;
+	for (int i = 0; i < width; i++) {
+		for (int j = 0; j < height; j++) {
+			if (plan[i][j] != emptyDummyBuilding) {
+				temp.insert(plan[i][j]);
+			}
+		}
+	}
+	buildings.clear();
+	std::copy(temp.begin(), temp.end(), std::back_inserter(buildings));
 
 	return true;
 }
@@ -270,7 +282,7 @@ void CapycitySim::HandleAction(Action action) {
 		}
 	}
 	else if (action == Delete) {
-		if (DeleteBuilding()) {
+		if (DeleteArea()) {
 			cout << "Bereich erfolgreich geloescht!" << endl;
 		}
 	}

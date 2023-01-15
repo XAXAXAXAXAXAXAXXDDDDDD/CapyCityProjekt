@@ -43,4 +43,6 @@ public:
 	void ausgeben();
 	int getPreis();
 	void materialAusgeben();
+	bool decX();
+	bool decY();
 };

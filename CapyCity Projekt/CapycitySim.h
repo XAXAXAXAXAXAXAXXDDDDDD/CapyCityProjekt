@@ -35,7 +35,7 @@ public:
 
 #pragma region Handle Action Methods
 	bool Display();
-	bool DeleteBuilding();
+	bool DeleteArea();
 	bool PlaceBuilding();
 #pragma endregion
 

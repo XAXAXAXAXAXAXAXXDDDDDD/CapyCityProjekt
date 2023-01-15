@@ -57,6 +57,16 @@ void Building::ausgeben() {
 	cout << "| " + label + " ";
 }
 
+bool Building::decX() {
+	x--;
+	return x <= 0;
+}
+
+bool Building::decY() {
+	y--;
+	return y <= 0;
+}
+
 
 const string Building::EMPTY_LABEL = "Empty";
 const string Building::SOLAR_LABEL = "Solarpanel";
