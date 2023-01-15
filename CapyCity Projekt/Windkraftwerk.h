@@ -5,8 +5,18 @@ class Windkraftwerk :
 	public Building
 {
 public:
-	Windkraftwerk(double gP = 500) : Building(gP, "Windkraftwerk") {
-		Building::materialien = { new Metall(), new Metall(), new Kunststoff(), new Kunststoff() };
+	Windkraftwerk(int x, int y, int width, int height, double gP = 500) : Building(x, y, width, height) {
+		// initialize materials based on size of building
+		/*Building::materialien = vector<Material*>(height * width * 4);*/
+		for (int i = 0; i < height * width; i++) {
+			Building::materialien.push_back(new Metall());
+			Building::materialien.push_back(new Metall());
+			Building::materialien.push_back(new Kunststoff());
+			Building::materialien.push_back(new Kunststoff());
+		};
+		// set other members
+		Building::grundPreis = gP;
+		Building::label = WIND_LABEL;
 	}
 };
 

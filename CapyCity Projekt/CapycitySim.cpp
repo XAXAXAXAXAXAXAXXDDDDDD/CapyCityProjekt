@@ -55,7 +55,7 @@ bool CapycitySim::FindOverlappingBuildings(int x, int y, int width, int height) 
 	// iterate through part of plan array 
 	for (int i = x; i < x + width; i++) {
 		for (int j = y; j < y + height; j++) {
-			if (plan[i][j].getLabel() != "Empty") {
+			if (plan[i][j]->getLabel() != "Empty") {
 				return true;
 			}
 		}
@@ -71,22 +71,14 @@ bool CapycitySim::PlaceBuilding() {
 	int heightOfBuilding;
 	int widthOfBuilding;
 	int xPosition;
-	int yPosition;
-	Building type;
+	int yPosition; 
+	Building* type = emptyDummyBuilding;
 	string typeString;
 
-	cout << "Art des Gebaeudes (Solarpanel, Windkraftwerk, Wasserkraftwerk): " << endl;
+	printf("Art des Gebaeudes (%s, %s, %s): \n", Building::SOLAR_LABEL.c_str(), Building::WIND_LABEL.c_str(), Building::WASSER_LABEL.c_str());
 	cin >> typeString;
-	if (typeString._Equal("Solarpanel")) {
-		type = Solarpanel();
-	}
-	else if (typeString._Equal("Windkraftwerk")) {
-		type = Windkraftwerk();
-	}
-	else if (typeString._Equal("Wasserkraftwerk")) {
-		type = Wasserkraftwerk();
-	}
-	else {
+
+	if (!(typeString._Equal(Building::SOLAR_LABEL) || typeString._Equal(Building::WIND_LABEL) || typeString._Equal(Building::WASSER_LABEL))) {
 		return false;
 	}
 
@@ -128,6 +120,16 @@ bool CapycitySim::PlaceBuilding() {
 		return false;
 	}
 
+	if (typeString._Equal(Building::SOLAR_LABEL)) {
+		type = new Solarpanel(xPosition, yPosition, widthOfBuilding, heightOfBuilding);
+	}
+	else if (typeString._Equal(Building::WIND_LABEL)) {
+		type = new Windkraftwerk(xPosition, yPosition, widthOfBuilding, heightOfBuilding);
+	}
+	else if (typeString._Equal(Building::WASSER_LABEL)) {
+		type = new Wasserkraftwerk(xPosition, yPosition, widthOfBuilding, heightOfBuilding);
+	}
+
 	// setting new building is allowed
 	// set new building
 	for (int i = xPosition; i < xPosition + widthOfBuilding; i++) {
@@ -135,6 +137,7 @@ bool CapycitySim::PlaceBuilding() {
 			plan[i][j] = type;
 		}
 	}
+	buildings.push_back(type);
 
 	// return success
 	return true;
@@ -184,7 +187,7 @@ bool CapycitySim::DeleteBuilding() {
 
 	for (int i = xPosition; i < xPosition + widthOfBuilding; i++) {
 		for (int j = yPosition; j < yPosition + heightOfBuilding; j++) {
-			plan[i][j] = Building();
+			plan[i][j] = emptyDummyBuilding;
 		}
 	}
 
@@ -208,8 +211,8 @@ void CapycitySim::DisplayBuildings() {
 	map<string, int> buildingToCount;
 	for (int i = 0; i < width; i++) {
 		for (int j = 0; j < height; j++) {
-			string currLabel = plan[i][j].getLabel();
-			if (currLabel == "Empty") continue;
+			string currLabel = plan[i][j]->getLabel();
+			if (currLabel == Building::EMPTY_LABEL) continue;
 
 			if (buildingToCount.count(currLabel) == 0) {
 				buildingToCount.emplace(currLabel, 1);
@@ -220,9 +223,9 @@ void CapycitySim::DisplayBuildings() {
 		}
 	}
 
-	map<string, Building> labelToDummy = { {"Empty", Building()}, {"Solarpanel", Solarpanel()}, {"Windkraftwerk", Windkraftwerk()}, {"Wasserkraftwerk", Wasserkraftwerk()} };
+	//map<string, Building> labelToDummy = { {"Empty", Building()}, {"Solarpanel", Solarpanel()}, {"Windkraftwerk", Windkraftwerk()}, {"Wasserkraftwerk", Wasserkraftwerk()} };
 
-	int gesamtpreisPlan = 0;
+	/*int gesamtpreisPlan = 0;
 
 	for (auto pair : buildingToCount) {
 		cout << pair.first << ": " << pair.second << " Felder" << endl << " - - - Einzelpreis pro Baufeld: " << labelToDummy[pair.first].getPreis() << endl << " - - - Benoetigte Materialien pro Baufeld: ";
@@ -232,7 +235,7 @@ void CapycitySim::DisplayBuildings() {
 		gesamtpreisPlan += labelToDummy[pair.first].getPreis() * pair.second;
 	}
 
-	cout << "Gesamtpreis fuer alle Gebaeude und Baufelder des Plans: " << gesamtpreisPlan << endl;
+	cout << "Gesamtpreis fuer alle Gebaeude und Baufelder des Plans: " << gesamtpreisPlan << endl;*/
 }
 
 void CapycitySim::DisplayPlan() {
@@ -240,17 +243,17 @@ void CapycitySim::DisplayPlan() {
 
 	cout << " ";
 	for (int j = 0; j < width; j++) {
-		balkenAusgeben(plan[j][0].getLabel().size());
+		balkenAusgeben(plan[j][0]->getLabel().size());
 	}
 	cout << endl;
 
 	for (int i = 0; i < height; i++) {
 		for (int j = 0; j < width; j++) {
-			plan[j][i].ausgeben();
+			plan[j][i]->ausgeben();
 		}
 		cout << "|" << endl << " ";
 		for (int j = 0; j < width; j++) {
-			balkenAusgeben(plan[j][i].getLabel().size());
+			balkenAusgeben(plan[j][i]->getLabel().size());
 		}
 		cout << endl;
 	}
@@ -283,3 +286,8 @@ void CapycitySim::balkenAusgeben(int count) {
 	}
 	cout << "- ";
 };
+
+
+bool CapycitySim::checkBounds() {
+	return false;
+}

@@ -12,14 +12,19 @@ class CapycitySim
 private:
 	int height;
 	int width;
-	Building** plan;
+	Building*** plan;
+	vector<Building*> buildings;
+	Building* emptyDummyBuilding;
 public:
 	enum Action { Place, Delete, Displays, Exit, Wrong };
 
-	CapycitySim(int h, int w) : height(h), width(w), plan(new Building* [width]) {
+	CapycitySim(int h, int w) : height(h), width(w), plan(new Building** [width]), buildings(vector<Building*>()), emptyDummyBuilding(new Building(0, 0, 1, 1)) {
 		cout << "Erstelleung eines Bauplans der Groesse: " << width << "x" << height << endl;
 		for (int i = 0; i < width; i++) {
-			plan[i] = new Building[height];
+			plan[i] = new Building*[height];
+			for (int j = 0; j < height; j++) {
+				plan[i][j] = emptyDummyBuilding;
+			}
 		}
 	};
 
@@ -39,6 +44,7 @@ public:
 	void balkenAusgeben(int count);
 	void DisplayPlan();
 	void DisplayBuildings();
+	bool checkBounds();
 #pragma endregion
 
 };

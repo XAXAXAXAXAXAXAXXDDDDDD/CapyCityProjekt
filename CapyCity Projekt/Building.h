@@ -10,87 +10,37 @@
 
 using namespace std;
 
+
 class Building
 {
 protected:
+	int height;
+	int width;
+	int x;
+	int y;
 	double grundPreis;
 	string label;
 	vector<Material*> materialien;
 public:
-	Building() : grundPreis(0), label("Empty"), materialien(vector<Material*>()) { };
-	Building(double gP, string l) : grundPreis(gP), label(l), materialien(vector<Material*>()) { }
-	Building(const Building& other) : grundPreis(other.grundPreis), label(other.label), materialien(vector<Material*>(other.materialien.size())) {
-		for (int i = 0; i < other.materialien.size(); i++) {
-			//materialien[i] = new Material(0);
-			//materialien[i]->setPreis(other.materialien[i]->getPreis());
-			/*const char* type = typeid(*(other.materialien[i])).name();
-			if (strcmp(type, "Holz") == 0) {
-				materialien[i] = new Holz();
-			}
-			else if (strcmp(typeid(*(other.materialien[i])).name(), "Metall") == 0) {
-				materialien[i] = new Metall();
-			}
-			else if (strcmp(typeid(*(other.materialien[i])).name(), "Kunststoff") == 0) {
-				materialien[i] = new Kunststoff();
-			}
-			else {
-				materialien[i] = new Material(0);
-			}*/
+	static const string EMPTY_LABEL;
+	static const string SOLAR_LABEL;
+	static const string WIND_LABEL;
+	static const string WASSER_LABEL;
 
-			if (dynamic_cast<Holz*>(other.materialien[i]) != nullptr) {
-				materialien[i] = new Holz();
-			}
-			else if (dynamic_cast<Metall*>(other.materialien[i]) != nullptr) {
-				materialien[i] = new Metall();
-			}
-			else if (dynamic_cast<Kunststoff*>(other.materialien[i]) != nullptr) {
-				materialien[i] = new Kunststoff();
-			}
-			else {
-				materialien[i] = new Material(0);
-			}
-		}
-	}
-	~Building() {
-		for (int i = 0; i < materialien.size(); i++) {
-			delete materialien[i];
-			materialien[i] = nullptr;
-		}
-	};
-
-	Building& operator=(Building other) {
-		swap(other);
-		return *this;
-	}
-
-	void swap(Building& other) {
-		std::swap(other.materialien, materialien);
-		grundPreis = other.grundPreis;
-		label = other.label;
-	}
+	//Building() : grundPreis(0), label(EMPTY_LABEL), materialien(vector<Material*>()) { };
+	Building(int x, int y, int width, int height) : grundPreis(0), label(EMPTY_LABEL), materialien(vector<Material*>()), x(x), y(y), width(width), height(height) { };
+	//Building(int x, int y, int width, int height, double gP, string l) : grundPreis(gP), label(l), materialien(vector<Material*>()) { }
+	Building(const Building& other);
+	~Building();
 
 	string getLabel() const {
 		return label;
 	}
 
-	void ausgeben() {
-		cout << "| " + label + " ";
-	}
+	Building& operator=(Building other);
 
-	int getPreis() {
-		int materialKosten = 0;
-		for (auto material : materialien) {
-			materialKosten += material->getPreis();
-		}
-
-		return grundPreis + materialKosten;
-	}
-
-	void materialAusgeben() {
-		for (auto material : materialien) {
-			material->ausgeben();
-			cout << " ";
-		}
-	}
+	void swap(Building& other);
+	void ausgeben();
+	int getPreis();
+	void materialAusgeben();
 };
-
