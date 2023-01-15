@@ -1,14 +1,14 @@
 #pragma once
 #include "Material.h"
-class Kunststoff :
-    public Material
-{
-public:
-    Kunststoff() : Material(2) { };
-    ~Kunststoff() = default;
-
-    void ausgeben() override {
-        cout << "Kunststoff";
-    }
-};
+//class Kunststoff :
+//	public Material
+//{
+//public:
+//	Kunststoff() : Material(2) { name = "Kunststoff"; };
+//	~Kunststoff() = default;
+//
+//	void ausgeben() override {
+//		cout << name;
+//	}
+//};
 

@@ -6,7 +6,11 @@ class Windkraftwerk :
 {
 public:
 	Windkraftwerk(double gP = 500) : Building(gP, "Windkraftwerk") {
-		Building::materialien = { new Metall(), new Metall(), new Kunststoff(), new Kunststoff() };
+		Building::materialien = new Materialverwaltung();
+		materialien->addMaterial(Materialverwaltung::Material_Metall);
+		materialien->addMaterial(Materialverwaltung::Material_Metall);
+		materialien->addMaterial(Materialverwaltung::Material_Kunststoff);
+		materialien->addMaterial(Materialverwaltung::Material_Kunststoff);
 	}
 };
 

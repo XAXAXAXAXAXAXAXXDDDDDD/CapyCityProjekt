@@ -130,6 +130,7 @@
   <ItemGroup>
     <ClCompile Include="Building.cpp" />
     <ClCompile Include="CapycitySim.cpp" />
+    <ClCompile Include="Materialverwaltung.cpp" />
     <ClCompile Include="Solarpanel.cpp" />
     <ClCompile Include="Wasserkraftwerk.cpp" />
     <ClCompile Include="Holz.cpp" />
@@ -144,6 +145,7 @@
   <ItemGroup>
     <ClInclude Include="Building.h" />
     <ClInclude Include="CapycitySim.h" />
+    <ClInclude Include="Materialverwaltung.h" />
     <ClInclude Include="Solarpanel.h" />
     <ClInclude Include="Wasserkraftwerk.h" />
     <ClInclude Include="Holz.h" />

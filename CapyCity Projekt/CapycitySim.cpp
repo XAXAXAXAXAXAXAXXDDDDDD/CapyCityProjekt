@@ -226,7 +226,7 @@ void CapycitySim::DisplayBuildings() {
 
 	for (auto pair : buildingToCount) {
 		cout << pair.first << ": " << pair.second << " Felder" << endl << " - - - Einzelpreis pro Baufeld: " << labelToDummy[pair.first].getPreis() << endl << " - - - Benoetigte Materialien pro Baufeld: ";
-		labelToDummy[pair.first].materialAusgeben();
+		labelToDummy[pair.first].materialienAusgeben();
 		cout << endl;
 
 		gesamtpreisPlan += labelToDummy[pair.first].getPreis() * pair.second;
