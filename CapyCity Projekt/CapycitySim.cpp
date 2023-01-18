@@ -2,23 +2,12 @@
 #include <map>
 
 
-///// <summary>
-///// Mapping enum value to string.
-///// </summary>
-//string buildings[] = { "Empty", "House", "Farm" };
-
-///// <summary>
-///// Mapping the Building name to its enum value.
-///// </summary>
-//static std::unordered_map<std::string, Building> const table = { {"Empty", Empty}, {"House", House}, {"Farm", Farm} };
-//
-
 /// <summary>
 /// Shows the menu for users to choose action.
 /// </summary>
 /// <returns></returns>
 CapycitySim::Action CapycitySim::ShowMenu() {
-	string menu = "Menue: \nDruecke 's' um Gebauede zu setzen\nDruecke 'l' um Bereich zu loeschen\nDruecke 'a' um Plan auszugeben\nDruecke 'e' um Programm zu beenden";
+	string menu = "Menue: \nDruecke 's' um Gebauede zu setzen\nDruecke 'l' um Bereich zu loeschen\nDruecke 'a' um Plan auszugeben\nDruecke 'e' um Programm zu beenden\nDruecke 'n' um neuen Plan zu erstellen\nDruecke 'all' um alle Plaene auszugeben";
 	cout << menu << endl;
 	// read user input
 	string input;
@@ -37,104 +26,87 @@ CapycitySim::Action CapycitySim::ShowMenu() {
 	else if (input._Equal("e")) {
 		return Exit;
 	}
+	else if (input._Equal("n")) {
+		return NewPlan;
+	}
+	else if (input._Equal("all")) {
+		return DisplayAll;
+	}
 	else {
 		return Wrong;
 	}
 }
 
-/// <summary>
-/// Helper method for finding overlapping buildings in the given square.
-/// </summary>
-/// <param name="x"></param>
-/// <param name="y"></param>
-/// <param name="width"></param>
-/// <param name="height"></param>
-/// <returns></returns>
-bool CapycitySim::FindOverlappingBuildings(int x, int y, int width, int height) {
-
-	// iterate through part of plan array 
-	for (int i = x; i < x + width; i++) {
-		for (int j = y; j < y + height; j++) {
-			if (plan[i][j].getLabel() != "Empty") {
-				return true;
-			}
-		}
+bool CapycitySim::creatNewPlan() {
+	Blueprint::CheckEqual checkEquality(*currentBlueprint);
+	bool equalPlanFound = false;
+	for (auto it = ++blueprints.rbegin(); it != blueprints.rend(); ++it) {
+		equalPlanFound = checkEquality(*it);
 	}
-	return false;
+
+	if (equalPlanFound) {
+		// nicht popback sondern remove currentBlueprint --> sortierung in ausgabe!
+		blueprints.pop_back();
+		cout << "Letzter Plan wurde geloescht! Es existiert bereits ein identischer." << endl;
+	}
+
+	int width = 0;
+	int height = 0;
+
+	cout << "Breite des neuen Baufeldes: " << endl;
+	cin >> width;
+	if (width <= 0) return false;
+	cout << "Hoehe des neuen Baufeldes: " << endl;
+	cin >> height;
+	if (height <= 0) return false;
+
+	return creatNewPlan(width, height);
 }
+
+bool CapycitySim::creatNewPlan(int width, int height) {
+
+	Blueprint* newPlan = new Blueprint(width, height);
+	blueprints.push_back(*newPlan);
+	currentBlueprint = newPlan;
+
+	return true;
+}
+
 
 /// <summary>
 /// Action Place Building.
 /// </summary>
 /// <returns>Bool determining whether placement was successful.</returns>
-bool CapycitySim::PlaceBuilding() {
-	int heightOfBuilding;
-	int widthOfBuilding;
-	int xPosition;
-	int yPosition;
-	Building type;
+bool CapycitySim::placeBuilding() {
+	Building* type;
 	string typeString;
 
 	cout << "Art des Gebaeudes (Solarpanel, Windkraftwerk, Wasserkraftwerk): " << endl;
 	cin >> typeString;
 	if (typeString._Equal("Solarpanel")) {
-		type = Solarpanel();
+		type = new Solarpanel();
 	}
 	else if (typeString._Equal("Windkraftwerk")) {
-		type = Windkraftwerk();
+		type = new Windkraftwerk();
 	}
 	else if (typeString._Equal("Wasserkraftwerk")) {
-		type = Wasserkraftwerk();
+		type = new Wasserkraftwerk();
 	}
 	else {
 		return false;
 	}
 
-	// read and check width input
-	cout << "Breite: " << endl;
-	cin >> widthOfBuilding;
-	if (widthOfBuilding < 0 || widthOfBuilding > width) {
-		cout << "Ups! Breite ist zu klein oder zu gross." << endl;
-		return false;
-	}
+	auto userInput = checkBounds();
 
-	// read and check height input
-	cout << "Hoehe: " << endl;
-	cin >> heightOfBuilding;
-	if (heightOfBuilding < 0 || heightOfBuilding > height) {
-		cout << "Ups! Hoehe ist zu klein oder zu gross." << endl;
-		return false;
-	}
-
-	// read and check x coordinate input
-	cout << "x-Koordinate: " << endl;
-	cin >> xPosition;
-	if (xPosition < 0 || xPosition + widthOfBuilding > width) {
-		cout << "Ups! Das Gebaeude ragt ueber die verfuegbare Flaeche hinaus." << endl;
-		return false;
-	}
-
-	// read and check y coordinate input
-	cout << "y-Koordinate: " << endl;
-	cin >> yPosition;
-	if (yPosition < 0 || yPosition + heightOfBuilding > height) {
-		cout << "Ups! Das Gebaeude ragt ueber die verfuegbare Flaeche hinaus." << endl;
-		return false;
-	}
+	if (!get<0>(userInput)) return false;
 
 	// check if there are already other buildings in the area
-	if (FindOverlappingBuildings(xPosition, yPosition, widthOfBuilding, heightOfBuilding)) {
+	if (currentBlueprint->findOverlappingBuildings(get<1>(userInput), get<2>(userInput), get<3>(userInput), get<4>(userInput))) {
 		cout << "Kann kein Gebaeude setzen! Es existiert bereits eins an dieser Stelle!" << endl;
 		return false;
 	}
 
-	// setting new building is allowed
-	// set new building
-	for (int i = xPosition; i < xPosition + widthOfBuilding; i++) {
-		for (int j = yPosition; j < yPosition + heightOfBuilding; j++) {
-			plan[i][j] = type;
-		}
-	}
+	currentBlueprint->placeBuildings(get<1>(userInput), get<2>(userInput), get<3>(userInput), get<4>(userInput), type);
 
 	// return success
 	return true;
@@ -144,49 +116,12 @@ bool CapycitySim::PlaceBuilding() {
 /// Action Delete Building.
 /// </summary>
 /// <returns></returns>
-bool CapycitySim::DeleteBuilding() {
-	int heightOfBuilding;
-	int widthOfBuilding;
-	int xPosition;
-	int yPosition;
+bool CapycitySim::deleteBuilding() {
+	auto userInput = checkBounds();
 
-	// read and check width input
-	cout << "Breite: " << endl;
-	cin >> widthOfBuilding;
-	if (widthOfBuilding < 0 || widthOfBuilding > width) {
-		cout << "Ups! Breite ist zu klein oder zu gross." << endl;
-		return false;
-	}
+	if (!get<0>(userInput)) return false;
 
-	// read and check height input
-	cout << "Hoehe: " << endl;
-	cin >> heightOfBuilding;
-	if (heightOfBuilding < 0 || heightOfBuilding > height) {
-		cout << "Ups! Hoehe ist zu klein oder zu gross." << endl;
-		return false;
-	}
-
-	// read and check x coordinate input
-	cout << "x-Koordinate: " << endl;
-	cin >> xPosition;
-	if (xPosition < 0 || xPosition + widthOfBuilding > width) {
-		cout << "Ups! Der zu loeschende Radius ragt ueber die verfuegbare Flaeche hinaus." << endl;
-		return false;
-	}
-
-	// read and check y coordinate input
-	cout << "y-Koordinate: " << endl;
-	cin >> yPosition;
-	if (yPosition < 0 || yPosition + heightOfBuilding > height) {
-		cout << "Ups! Der zu loeschende Radius ragt ueber die verfuegbare Flaeche hinaus." << endl;
-		return false;
-	}
-
-	for (int i = xPosition; i < xPosition + widthOfBuilding; i++) {
-		for (int j = yPosition; j < yPosition + heightOfBuilding; j++) {
-			plan[i][j] = Building();
-		}
-	}
+	currentBlueprint->deleteBuildings(get<1>(userInput), get<2>(userInput), get<3>(userInput), get<4>(userInput));
 
 	return true;
 }
@@ -195,66 +130,15 @@ bool CapycitySim::DeleteBuilding() {
 /// Action Display Building. Prints current Building Plan.
 /// </summary>
 /// <returns></returns>
-bool CapycitySim::Display() {
-	DisplayPlan();
+bool CapycitySim::display() {
+	currentBlueprint->displayPlan();
 
-	DisplayBuildings();
+	currentBlueprint->displayBuildings();
 
 	return true;
 }
 
-void CapycitySim::DisplayBuildings() {
-	cout << endl << "Gebaeude: " << endl;
-	map<string, int> buildingToCount;
-	for (int i = 0; i < width; i++) {
-		for (int j = 0; j < height; j++) {
-			string currLabel = plan[i][j].getLabel();
-			if (currLabel == "Empty") continue;
 
-			if (buildingToCount.count(currLabel) == 0) {
-				buildingToCount.emplace(currLabel, 1);
-			}
-			else {
-				buildingToCount[currLabel]++;
-			}
-		}
-	}
-
-	map<string, Building> labelToDummy = { {"Empty", Building()}, {"Solarpanel", Solarpanel()}, {"Windkraftwerk", Windkraftwerk()}, {"Wasserkraftwerk", Wasserkraftwerk()} };
-
-	int gesamtpreisPlan = 0;
-
-	for (auto pair : buildingToCount) {
-		cout << pair.first << ": " << pair.second << " Felder" << endl << " - - - Einzelpreis pro Baufeld: " << labelToDummy[pair.first].getPreis() << endl << " - - - Benoetigte Materialien pro Baufeld: ";
-		labelToDummy[pair.first].materialienAusgeben();
-		cout << endl;
-
-		gesamtpreisPlan += labelToDummy[pair.first].getPreis() * pair.second;
-	}
-
-	cout << "Gesamtpreis fuer alle Gebaeude und Baufelder des Plans: " << gesamtpreisPlan << endl;
-}
-
-void CapycitySim::DisplayPlan() {
-	cout << endl << endl << "Plan: " << endl;
-
-	cout << " ";
-	for (int j = 0; j < width; j++) {
-		balkenAusgeben(plan[j][0].getLabel().size());
-	}
-	cout << endl;
-
-	for (int i = 0; i < height; i++) {
-		for (int j = 0; j < width; j++) {
-			plan[j][i].ausgeben();
-		}
-		cout << "|" << endl << " ";
-		for (int j = 0; j < width; j++) {
-			balkenAusgeben(plan[j][i].getLabel().size());
-		}
-		cout << endl;
-	}
-}
 
 /// <summary>
 /// Starts execution of user action.
@@ -262,24 +146,74 @@ void CapycitySim::DisplayPlan() {
 /// <param name="action">The given Action.</param>
 void CapycitySim::HandleAction(Action action) {
 	if (action == Place) {
-		if (PlaceBuilding()) {
+		if (placeBuilding()) {
 			cout << "Gebaeude erfolgreich gesetzt!" << endl;
 		}
 	}
 	else if (action == Delete) {
-		if (DeleteBuilding()) {
+		if (deleteBuilding()) {
 			cout << "Bereich erfolgreich geloescht!" << endl;
 		}
 	}
+	else if (action == NewPlan) {
+		if (creatNewPlan()) {
+			cout << "Neuer Plan erfolgreich erstellt!" << endl;
+		}
+	}
+	else if (action == DisplayAll) {
+		displayAll();
+	}
 	else {
-		Display();
+		display();
 	}
 }
 
+tuple<bool, int, int, int, int> CapycitySim::checkBounds() {
+	int heightOfArea;
+	int widthOfArea;
+	int xPosition;
+	int yPosition;
 
-void CapycitySim::balkenAusgeben(int count) {
-	for (int i = 0; i <= count; i++) {
-		cout << "-";
+	// read and check width input
+	cout << "Breite: " << endl;
+	cin >> widthOfArea;
+	if (widthOfArea < 0 || widthOfArea > currentBlueprint->getWidth()) {
+		cout << "Ups! Breite ist zu klein oder zu gross." << endl;
+		return tuple<bool, int, int, int, int>(false, -1, -1, -1, -1);
 	}
-	cout << "- ";
-};
+
+	// read and check height input
+	cout << "Hoehe: " << endl;
+	cin >> heightOfArea;
+	if (heightOfArea < 0 || heightOfArea > currentBlueprint->getHeight()) {
+		cout << "Ups! Hoehe ist zu klein oder zu gross." << endl;
+		return tuple<bool, int, int, int, int>(false, -1, -1, -1, -1);
+	}
+
+	// read and check x coordinate input
+	cout << "x-Koordinate: " << endl;
+	cin >> xPosition;
+	if (xPosition < 0 || xPosition + widthOfArea > currentBlueprint->getWidth()) {
+		cout << "Ups! Der zu loeschende Radius ragt ueber die verfuegbare Flaeche hinaus." << endl;
+		return tuple<bool, int, int, int, int>(false, -1, -1, -1, -1);
+	}
+
+	// read and check y coordinate input
+	cout << "y-Koordinate: " << endl;
+	cin >> yPosition;
+	if (yPosition < 0 || yPosition + heightOfArea > currentBlueprint->getHeight()) {
+		cout << "Ups! Der zu loeschende Radius ragt ueber die verfuegbare Flaeche hinaus." << endl;
+		return tuple<bool, int, int, int, int>(false, -1, -1, -1, -1);
+	}
+
+	return tuple<bool, int, int, int, int>(true, xPosition, yPosition, widthOfArea, heightOfArea);
+}
+
+
+bool CapycitySim::displayAll() {
+	sort(blueprints.begin(), blueprints.end(), [](Blueprint bp1, Blueprint bp2) -> bool {return bp1.calculateKennzahl() > bp2.calculateKennzahl(); });
+
+	for_each(blueprints.begin(), blueprints.end(), [](Blueprint bp) {bp.displayPlan(); bp.displayBuildings(); });
+
+	return true;
+}

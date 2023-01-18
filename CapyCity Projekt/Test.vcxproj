@@ -128,6 +128,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Blueprint.cpp" />
     <ClCompile Include="Building.cpp" />
     <ClCompile Include="CapycitySim.cpp" />
     <ClCompile Include="Materialverwaltung.cpp" />
@@ -143,6 +144,7 @@
     <ClCompile Include="Metall.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Blueprint.h" />
     <ClInclude Include="Building.h" />
     <ClInclude Include="CapycitySim.h" />
     <ClInclude Include="Materialverwaltung.h" />

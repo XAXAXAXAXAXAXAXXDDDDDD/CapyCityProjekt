@@ -27,7 +27,7 @@ bool Materialverwaltung::removeMaterial(string m) {
 	return false;
 }
 
-int Materialverwaltung::getPreisOfMaterials() const {
+int Materialverwaltung::getPreisOfMaterials() {
 	int preis = 0;
 	for (auto& material : materialsToCount) {
 		preis += material_to_Price[material.first] * material.second;

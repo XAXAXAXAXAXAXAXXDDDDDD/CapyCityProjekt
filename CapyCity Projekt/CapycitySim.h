@@ -3,25 +3,21 @@
 #include "Solarpanel.h"
 #include "Wasserkraftwerk.h"
 #include "Windkraftwerk.h"
+#include "Blueprint.h"
 #include <iostream>
+#include <algorithm>
 
 using namespace std;
 
 class CapycitySim
 {
 private:
-	int height;
-	int width;
-	Building** plan;
+	vector<Blueprint> blueprints;
+	Blueprint* currentBlueprint;
 public:
-	enum Action { Place, Delete, Displays, Exit, Wrong };
+	enum Action { Place, Delete, Displays, Exit, Wrong, NewPlan, DisplayAll };
 
-	CapycitySim(int h, int w) : height(h), width(w), plan(new Building* [width]) {
-		cout << "Erstelleung eines Bauplans der Groesse: " << width << "x" << height << endl;
-		for (int i = 0; i < width; i++) {
-			plan[i] = new Building[height];
-		}
-	};
+	CapycitySim() : blueprints(vector<Blueprint>()), currentBlueprint(nullptr) { };
 
 #pragma region Interaction
 	Action ShowMenu();
@@ -29,16 +25,16 @@ public:
 #pragma endregion
 
 #pragma region Handle Action Methods
-	bool Display();
-	bool DeleteBuilding();
-	bool PlaceBuilding();
+	bool display();
+	bool deleteBuilding();
+	bool placeBuilding();
+	bool creatNewPlan();
+	bool creatNewPlan(int width, int height);
+	bool displayAll();
 #pragma endregion
 
 #pragma region Helper Methods
-	bool FindOverlappingBuildings(int x, int y, int width, int height);
-	void balkenAusgeben(int count);
-	void DisplayPlan();
-	void DisplayBuildings();
+	tuple<bool, int, int, int, int> checkBounds();
 #pragma endregion
 
 };

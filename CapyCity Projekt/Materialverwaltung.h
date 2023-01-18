@@ -21,7 +21,7 @@ public:
 
 	bool addMaterial(string m);
 	bool removeMaterial(string m);
-	int getPreisOfMaterials() const;
+	int getPreisOfMaterials();
 	void ausgeben();
 }; 
 

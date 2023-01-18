@@ -17,10 +17,11 @@ protected:
 	double grundPreis;
 	string label;
 	Materialverwaltung* materialien;
+	double leistung;
 public:
-	Building() : grundPreis(0), label("Empty"), materialien(nullptr) { };
-	Building(double gP, string l) : grundPreis(gP), label(l), materialien(new Materialverwaltung()) { }
-	Building(const Building& other) : grundPreis(other.grundPreis), label(other.label), materialien(new Materialverwaltung()) {		
+	Building() : grundPreis(0), label("Empty"), materialien(nullptr), leistung(0.0) { };
+	Building(double gP, string l, double leistung) : grundPreis(gP), label(l), leistung(leistung), materialien(new Materialverwaltung()) { }
+	Building(const Building& other) : grundPreis(other.grundPreis), label(other.label), leistung(other.leistung), materialien(new Materialverwaltung()) {
 		if (other.materialien != nullptr) {
 			*materialien = *other.materialien;
 		}
@@ -41,6 +42,7 @@ public:
 		std::swap(other.materialien, materialien);
 		grundPreis = other.grundPreis;
 		label = other.label;
+		leistung = other.leistung;
 	}
 
 	string getLabel() const {
@@ -52,7 +54,11 @@ public:
 	}
 
 	int getPreis() {
-		return grundPreis + materialien->getPreisOfMaterials();
+		return grundPreis + ((materialien == nullptr) ? 0 : materialien->getPreisOfMaterials());
+	}
+
+	int getLeistung() const {
+		return leistung;
 	}
 
 	void materialienAusgeben() {
