@@ -11,12 +11,12 @@ Building** plan;
 /// <summary>
 /// Mapping enum value to string.
 /// </summary>
-string buildings[] = { "Empty", "House", "Farm" };
+string buildings[] = { "Empty", "Solarpanel", "Windkraftwerk", "Wasserkraftwerk" };
 
 /// <summary>
 /// Mapping the Building name to its enum value.
 /// </summary>
-static std::unordered_map<std::string, Building> const table = { {"Empty", Empty}, {"House", House}, {"Farm", Farm} };
+static std::unordered_map<std::string, Building> const table = { {"Empty", Empty}, {"Solarpanel", Solarpanel}, {"Windkraftwerk", Windkraftwerk}, {"Wasserkraftwerk", Wasserkraftwerk} };
 
 
 /// <summary>
@@ -81,7 +81,7 @@ bool PlaceBuilding() {
 	Building type;
 	string typeString;
 
-	printf("Art (%s, %s): ", buildings[House].c_str(), buildings[Farm].c_str());
+	printf("Art (%s, %s, %s): ", buildings[Solarpanel].c_str(), buildings[Windkraftwerk].c_str(), buildings[Wasserkraftwerk].c_str());
 	cin >> typeString;
 	// find user input
 	auto it = table.find(typeString);
@@ -96,7 +96,7 @@ bool PlaceBuilding() {
 	// read and check width input
 	cout << "Breite: " << endl;
 	cin >> widthOfBuilding;
-	if (widthOfBuilding < 0 || widthOfBuilding > Width) {
+	if (widthOfBuilding <= 0 || widthOfBuilding > Width) {
 		cout << "Ups! Breite ist zu klein oder zu gross." << endl;
 		return false;
 	}
@@ -104,7 +104,7 @@ bool PlaceBuilding() {
 	// read and check height input
 	cout << "Hoehe: " << endl;
 	cin >> heightOfBuilding;
-	if (heightOfBuilding < 0 || heightOfBuilding > Height) {
+	if (heightOfBuilding <= 0 || heightOfBuilding > Height) {
 		cout << "Ups! Hoehe ist zu klein oder zu gross." << endl;
 		return false;
 	}
@@ -156,7 +156,7 @@ bool DeleteBuilding() {
 	// read and check width input
 	cout << "Breite: " << endl;
 	cin >> widthOfBuilding;
-	if (widthOfBuilding < 0 || widthOfBuilding > Width) {
+	if (widthOfBuilding <= 0 || widthOfBuilding > Width) {
 		cout << "Ups! Breite ist zu klein oder zu gross." << endl;
 		return false;
 	}
@@ -164,7 +164,7 @@ bool DeleteBuilding() {
 	// read and check height input
 	cout << "Hoehe: " << endl;
 	cin >> heightOfBuilding;
-	if (heightOfBuilding < 0 || heightOfBuilding > Height) {
+	if (heightOfBuilding <= 0 || heightOfBuilding > Height) {
 		cout << "Ups! Hoehe ist zu klein oder zu gross." << endl;
 		return false;
 	}
