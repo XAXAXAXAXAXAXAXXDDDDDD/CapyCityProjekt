@@ -46,3 +46,8 @@ void Building::materialAusgeben() {
 		cout << " ";
 	}
 }
+
+const string Building::EMPTY_LABEL = "Empty";
+const string Building::SOLAR_LABEL = "Solarpanel";
+const string Building::WIND_LABEL = "Windkraftwerk";
+const string Building::WASSER_LABEL = "Wasserkraftwerk";

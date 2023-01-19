@@ -1,18 +1,6 @@
 #include "CapycitySim.h"
 #include <map>
 
-
-///// <summary>
-///// Mapping enum value to string.
-///// </summary>
-//string buildings[] = { "Empty", "House", "Farm" };
-
-///// <summary>
-///// Mapping the Building name to its enum value.
-///// </summary>
-//static std::unordered_map<std::string, Building> const table = { {"Empty", Empty}, {"House", House}, {"Farm", Farm} };
-//
-
 /// <summary>
 /// Shows the menu for users to choose action.
 /// </summary>
@@ -55,7 +43,7 @@ bool CapycitySim::FindOverlappingBuildings(int x, int y, int width, int height) 
 	// iterate through part of plan array 
 	for (int i = x; i < x + width; i++) {
 		for (int j = y; j < y + height; j++) {
-			if (plan[i][j].getLabel() != "Empty") {
+			if (plan[i][j].getLabel() != Building::EMPTY_LABEL) {
 				return true;
 			}
 		}
@@ -75,15 +63,15 @@ bool CapycitySim::PlaceBuilding() {
 	Building type;
 	string typeString;
 
-	cout << "Art des Gebaeudes (Solarpanel, Windkraftwerk, Wasserkraftwerk): " << endl;
+	printf("Art des Gebaeudes (%s, %s, %s): \n", Building::SOLAR_LABEL.c_str(), Building::WIND_LABEL.c_str(), Building::WASSER_LABEL.c_str());
 	cin >> typeString;
-	if (typeString._Equal("Solarpanel")) {
+	if (typeString._Equal(Building::SOLAR_LABEL)) {
 		type = Solarpanel();
 	}
-	else if (typeString._Equal("Windkraftwerk")) {
+	else if (typeString._Equal(Building::WIND_LABEL)) {
 		type = Windkraftwerk();
 	}
-	else if (typeString._Equal("Wasserkraftwerk")) {
+	else if (typeString._Equal(Building::WASSER_LABEL)) {
 		type = Wasserkraftwerk();
 	}
 	else {
@@ -93,7 +81,7 @@ bool CapycitySim::PlaceBuilding() {
 	// read and check width input
 	cout << "Breite: " << endl;
 	cin >> widthOfBuilding;
-	if (widthOfBuilding < 0 || widthOfBuilding > width) {
+	if (widthOfBuilding <= 0 || widthOfBuilding > width) {
 		cout << "Ups! Breite ist zu klein oder zu gross." << endl;
 		return false;
 	}
@@ -101,7 +89,7 @@ bool CapycitySim::PlaceBuilding() {
 	// read and check height input
 	cout << "Hoehe: " << endl;
 	cin >> heightOfBuilding;
-	if (heightOfBuilding < 0 || heightOfBuilding > height) {
+	if (heightOfBuilding <= 0 || heightOfBuilding > height) {
 		cout << "Ups! Hoehe ist zu klein oder zu gross." << endl;
 		return false;
 	}
@@ -153,7 +141,7 @@ bool CapycitySim::DeleteBuilding() {
 	// read and check width input
 	cout << "Breite: " << endl;
 	cin >> widthOfBuilding;
-	if (widthOfBuilding < 0 || widthOfBuilding > width) {
+	if (widthOfBuilding <= 0 || widthOfBuilding > width) {
 		cout << "Ups! Breite ist zu klein oder zu gross." << endl;
 		return false;
 	}
@@ -161,7 +149,7 @@ bool CapycitySim::DeleteBuilding() {
 	// read and check height input
 	cout << "Hoehe: " << endl;
 	cin >> heightOfBuilding;
-	if (heightOfBuilding < 0 || heightOfBuilding > height) {
+	if (heightOfBuilding <= 0 || heightOfBuilding > height) {
 		cout << "Ups! Hoehe ist zu klein oder zu gross." << endl;
 		return false;
 	}
@@ -209,7 +197,7 @@ void CapycitySim::DisplayBuildings() {
 	for (int i = 0; i < width; i++) {
 		for (int j = 0; j < height; j++) {
 			string currLabel = plan[i][j].getLabel();
-			if (currLabel == "Empty") continue;
+			if (currLabel == Building::EMPTY_LABEL) continue;
 
 			if (buildingToCount.count(currLabel) == 0) {
 				buildingToCount.emplace(currLabel, 1);
@@ -220,7 +208,7 @@ void CapycitySim::DisplayBuildings() {
 		}
 	}
 
-	map<string, Building> labelToDummy = { {"Empty", Building()}, {"Solarpanel", Solarpanel()}, {"Windkraftwerk", Windkraftwerk()}, {"Wasserkraftwerk", Wasserkraftwerk()} };
+	map<string, Building> labelToDummy = { {Building::EMPTY_LABEL, Building()}, {Building::SOLAR_LABEL, Solarpanel()}, {Building::WIND_LABEL, Windkraftwerk()}, {Building::WASSER_LABEL, Wasserkraftwerk()} };
 
 	int gesamtpreisPlan = 0;
 

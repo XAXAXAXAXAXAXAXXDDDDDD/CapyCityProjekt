@@ -17,7 +17,12 @@ protected:
 	string label;
 	vector<Material*> materialien;
 public:
-	Building() : grundPreis(0), label("Empty"), materialien(vector<Material*>()) { };
+	static const string EMPTY_LABEL;
+	static const string SOLAR_LABEL;
+	static const string WIND_LABEL;
+	static const string WASSER_LABEL;
+
+	Building() : grundPreis(0), label(EMPTY_LABEL), materialien(vector<Material*>()) { };
 	Building(double gP, string l) : grundPreis(gP), label(l), materialien(vector<Material*>()) { }
 	Building(const Building& other);
 	~Building() {
