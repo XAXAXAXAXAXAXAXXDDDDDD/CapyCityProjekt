@@ -1,7 +1,7 @@
 #pragma once
 
 #pragma region Enums
-enum Building { Empty, House, Farm };
+enum Building { Empty, Solarpanel, Windkraftwerk, Wasserkraftwerk };
 enum Action { Place, Delete, Display, Exit, Wrong };
 #pragma endregion
 
