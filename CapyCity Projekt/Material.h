@@ -9,7 +9,7 @@ protected:
 	double preis;
 public:
 	Material(double p) : preis(p) { };
-	~Material() = default;
+	virtual ~Material() = default;
 
 	double getPreis() { return preis; };
 	void setPreis(double p) { preis = p; };
