@@ -21,7 +21,7 @@ void Blueprint::displayBuildings() {
 
 	int gesamtpreisPlan = 0;
 
-	for (auto pair : buildingToCount) {
+	for (auto& pair : buildingToCount) {
 		cout << pair.first << ": " << pair.second << " Felder" << endl << " - - - Einzelpreis pro Baufeld: " << labelToDummy[pair.first].getPreis() << endl << " - - - Benoetigte Materialien pro Baufeld: ";
 		labelToDummy[pair.first].materialienAusgeben();
 		cout << endl;
@@ -53,8 +53,6 @@ void Blueprint::displayPlan() {
 		cout << endl;
 	}
 }
-
-
 
 void Blueprint::balkenAusgeben(int count) {
 	for (int i = 0; i <= count; i++) {

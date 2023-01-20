@@ -12,12 +12,12 @@ using namespace std;
 class CapycitySim
 {
 private:
-	vector<Blueprint> blueprints;
+	vector<Blueprint*> blueprints;
 	Blueprint* currentBlueprint;
 public:
 	enum Action { Place, Delete, Displays, Exit, Wrong, NewPlan, DisplayAll };
 
-	CapycitySim() : blueprints(vector<Blueprint>()), currentBlueprint(nullptr) { };
+	CapycitySim() : blueprints(vector<Blueprint*>()), currentBlueprint(nullptr) { };
 
 #pragma region Interaction
 	Action ShowMenu();

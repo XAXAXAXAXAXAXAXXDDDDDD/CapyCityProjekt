@@ -37,16 +37,25 @@ CapycitySim::Action CapycitySim::ShowMenu() {
 	}
 }
 
+/// <summary>
+/// Creates a new Plan and deletes the last worked on plan if there is already a similar plan in the blueprints.
+/// </summary>
+/// <returns></returns>
 bool CapycitySim::creatNewPlan() {
 	Blueprint::CheckEqual checkEquality(*currentBlueprint);
-	bool equalPlanFound = false;
-	for (auto it = ++blueprints.rbegin(); it != blueprints.rend(); ++it) {
-		equalPlanFound = checkEquality(*it);
+
+	int occurencesOfCurrentBlueprint = 0;
+	int lastOcurrence = -1;
+
+	for (unsigned i = 0; i < blueprints.size(); ++i) {
+		if (checkEquality(*blueprints[i])) {
+			lastOcurrence = i;
+			occurencesOfCurrentBlueprint++;
+		}
 	}
 
-	if (equalPlanFound) {
-		// nicht popback sondern remove currentBlueprint --> sortierung in ausgabe!
-		blueprints.pop_back();
+	if (occurencesOfCurrentBlueprint > 1 && lastOcurrence >= 0) {
+		blueprints.erase(blueprints.begin() + lastOcurrence);
 		cout << "Letzter Plan wurde geloescht! Es existiert bereits ein identischer." << endl;
 	}
 
@@ -65,9 +74,8 @@ bool CapycitySim::creatNewPlan() {
 
 bool CapycitySim::creatNewPlan(int width, int height) {
 
-	Blueprint* newPlan = new Blueprint(width, height);
-	blueprints.push_back(*newPlan);
-	currentBlueprint = newPlan;
+	currentBlueprint = new Blueprint(width, height);
+	blueprints.push_back(currentBlueprint);
 
 	return true;
 }
@@ -117,6 +125,7 @@ bool CapycitySim::placeBuilding() {
 /// </summary>
 /// <returns></returns>
 bool CapycitySim::deleteBuilding() {
+
 	auto userInput = checkBounds();
 
 	if (!get<0>(userInput)) return false;
@@ -131,6 +140,7 @@ bool CapycitySim::deleteBuilding() {
 /// </summary>
 /// <returns></returns>
 bool CapycitySim::display() {
+
 	currentBlueprint->displayPlan();
 
 	currentBlueprint->displayBuildings();
@@ -139,12 +149,26 @@ bool CapycitySim::display() {
 }
 
 
+/// <summary>
+/// Displays all Plans sorted by Kennzahl.
+/// </summary>
+/// <returns></returns>
+bool CapycitySim::displayAll() {
+
+	sort(blueprints.begin(), blueprints.end(), [](Blueprint* bp1, Blueprint* bp2) -> bool {return bp1->calculateKennzahl() > bp2->calculateKennzahl(); });
+
+	for_each(blueprints.begin(), blueprints.end(), [](Blueprint* bp) { bp->displayPlan(); bp->displayBuildings(); });
+
+	return true;
+}
+
 
 /// <summary>
 /// Starts execution of user action.
 /// </summary>
 /// <param name="action">The given Action.</param>
 void CapycitySim::HandleAction(Action action) {
+
 	if (action == Place) {
 		if (placeBuilding()) {
 			cout << "Gebaeude erfolgreich gesetzt!" << endl;
@@ -168,6 +192,10 @@ void CapycitySim::HandleAction(Action action) {
 	}
 }
 
+/// <summary>
+/// Get user input for height and width, x and y, and checks if the input is valid.
+/// </summary>
+/// <returns>Tuple Consisting of success (bool), x, y, width, height</returns>
 tuple<bool, int, int, int, int> CapycitySim::checkBounds() {
 	int heightOfArea;
 	int widthOfArea;
@@ -207,13 +235,4 @@ tuple<bool, int, int, int, int> CapycitySim::checkBounds() {
 	}
 
 	return tuple<bool, int, int, int, int>(true, xPosition, yPosition, widthOfArea, heightOfArea);
-}
-
-
-bool CapycitySim::displayAll() {
-	sort(blueprints.begin(), blueprints.end(), [](Blueprint bp1, Blueprint bp2) -> bool {return bp1.calculateKennzahl() > bp2.calculateKennzahl(); });
-
-	for_each(blueprints.begin(), blueprints.end(), [](Blueprint bp) {bp.displayPlan(); bp.displayBuildings(); });
-
-	return true;
 }
