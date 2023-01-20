@@ -18,7 +18,12 @@ protected:
 	string label;
 	Materialverwaltung* materialien;
 public:
-	Building() : grundPreis(0), label("Empty"), materialien(nullptr) { };
+	static const string EMPTY_LABEL;
+	static const string SOLAR_LABEL;
+	static const string WIND_LABEL;
+	static const string WASSER_LABEL;
+
+	Building() : grundPreis(0), label(EMPTY_LABEL), materialien(nullptr) { };
 	Building(double gP, string l) : grundPreis(gP), label(l), materialien(new Materialverwaltung()) { }
 	Building(const Building& other) : grundPreis(other.grundPreis), label(other.label), materialien(new Materialverwaltung()) {		
 		if (other.materialien != nullptr) {
@@ -36,27 +41,12 @@ public:
 		swap(other);
 		return *this;
 	}
+	void swap(Building& other);
 
-	void swap(Building& other) {
-		std::swap(other.materialien, materialien);
-		grundPreis = other.grundPreis;
-		label = other.label;
-	}
+	string getLabel();
+	int getPreis();
 
-	string getLabel() const {
-		return label;
-	}
-
-	void ausgeben() {
-		cout << "| " + label + " ";
-	}
-
-	int getPreis() {
-		return grundPreis + materialien->getPreisOfMaterials();
-	}
-
-	void materialienAusgeben() {
-		materialien->ausgeben();
-	}
+	void ausgeben();
+	void materialienAusgeben();	
 };
 

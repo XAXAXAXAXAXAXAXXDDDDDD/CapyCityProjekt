@@ -28,6 +28,8 @@ using namespace std;
 //		{
 //			return lhs.name < rhs.name;
 //		}
-//	};*/
+//	}
+//	map<Material, int, CmpMaterial> map = map<Material, int, CmpMaterial>();
+// ;*/
 //};
 
