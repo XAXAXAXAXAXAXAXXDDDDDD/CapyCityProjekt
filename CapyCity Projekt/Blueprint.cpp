@@ -6,7 +6,7 @@ void Blueprint::displayBuildings() {
 	for (int i = 0; i < width; i++) {
 		for (int j = 0; j < height; j++) {
 			string currLabel = plan[i][j].getLabel();
-			if (currLabel == "Empty") continue;
+			if (currLabel == Building::EMPTY_LABEL) continue;
 
 			if (buildingToCount.count(currLabel) == 0) {
 				buildingToCount.emplace(currLabel, 1);
@@ -17,7 +17,7 @@ void Blueprint::displayBuildings() {
 		}
 	}
 
-	map<string, Building> labelToDummy = { {"Empty", Building()}, {"Solarpanel", Solarpanel()}, {"Windkraftwerk", Windkraftwerk()}, {"Wasserkraftwerk", Wasserkraftwerk()} };
+	map<string, Building> labelToDummy = { {Building::EMPTY_LABEL, Building()}, {Building::SOLAR_LABEL, Solarpanel()}, {Building::WIND_LABEL, Windkraftwerk()}, {Building::WASSER_LABEL, Wasserkraftwerk()} };
 
 	int gesamtpreisPlan = 0;
 
@@ -92,7 +92,7 @@ bool Blueprint::findOverlappingBuildings(int x, int y, int width, int height) {
 	// iterate through part of plan array 
 	for (int i = x; i < x + width; i++) {
 		for (int j = y; j < y + height; j++) {
-			if (plan[i][j].getLabel() != "Empty") {
+			if (plan[i][j].getLabel() != Building::EMPTY_LABEL) {
 				return true;
 			}
 		}
@@ -100,7 +100,10 @@ bool Blueprint::findOverlappingBuildings(int x, int y, int width, int height) {
 	return false;
 }
 
-
+/// <summary>
+/// Calculates the Kennzahl of the current plan.
+/// </summary>
+/// <returns></returns>
 double Blueprint::calculateKennzahl() {
 	double gesamtLeistung = 0.0;
 	long gesamtPreis = 0;

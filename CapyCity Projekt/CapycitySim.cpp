@@ -89,15 +89,15 @@ bool CapycitySim::placeBuilding() {
 	Building* type;
 	string typeString;
 
-	cout << "Art des Gebaeudes (Solarpanel, Windkraftwerk, Wasserkraftwerk): " << endl;
+	printf("Art des Gebaeudes (%s, %s, %s): \n", Building::SOLAR_LABEL.c_str(), Building::WIND_LABEL.c_str(), Building::WASSER_LABEL.c_str());
 	cin >> typeString;
-	if (typeString._Equal("Solarpanel")) {
+	if (typeString._Equal(Building::SOLAR_LABEL)) {
 		type = new Solarpanel();
 	}
-	else if (typeString._Equal("Windkraftwerk")) {
+	else if (typeString._Equal(Building::WIND_LABEL)) {
 		type = new Windkraftwerk();
 	}
-	else if (typeString._Equal("Wasserkraftwerk")) {
+	else if (typeString._Equal(Building::WASSER_LABEL)) {
 		type = new Wasserkraftwerk();
 	}
 	else {
