@@ -191,6 +191,9 @@ bool CapycitySim::Display() {
 	return true;
 }
 
+/// <summary>
+/// Displays all the Building types, their materials and cost per field and the overall cost of the plan.
+/// </summary>
 void CapycitySim::DisplayBuildings() {
 	cout << endl << "Gebaeude: " << endl;
 	map<string, int> buildingToCount;
@@ -223,6 +226,9 @@ void CapycitySim::DisplayBuildings() {
 	cout << "Gesamtpreis fuer alle Gebaeude und Baufelder des Plans: " << gesamtpreisPlan << endl;
 }
 
+/// <summary>
+/// Displays the Plan in a decent format.
+/// </summary>
 void CapycitySim::DisplayPlan() {
 	cout << endl << endl << "Plan: " << endl;
 
@@ -264,7 +270,10 @@ void CapycitySim::HandleAction(Action action) {
 	}
 }
 
-
+/// <summary>
+/// Helper method for getting the border of the buildings in the display.
+/// </summary>
+/// <param name="count"></param>
 void CapycitySim::balkenAusgeben(int count) {
 	for (int i = 0; i <= count; i++) {
 		cout << "-";
